@@ -7,12 +7,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.Math.abs;
 
-public class Ruum{
+public class Ruum {
     String highlightStyle = "-fx-fill: green; -fx-opacity: 0.3;";
 
     private int number;
@@ -24,7 +25,7 @@ public class Ruum{
 
     public static Map<Integer, Ruum> ruumid = new HashMap<>();
 
-    public Group ring(){
+    public Group ring() {
         Circle ring = new Circle(raadius);
         ring.setCenterX(x);
         ring.setCenterY(y);
@@ -39,25 +40,25 @@ public class Ruum{
         double textHeight = text.getLayoutBounds().getHeight();
         text.setLayoutX(ring.getCenterX() - (textWidth / 2));
         text.setLayoutY(ring.getCenterY() + (textHeight / 4));
-        return new Group(ring,text);
+        return new Group(ring, text);
     }
 
 
     public boolean onRingis(double pointX, double pointY) {
-        var dx = abs(pointX-x);
-        var dy = abs(pointY-y);
-        if (dx>raadius) return false;
+        var dx = abs(pointX - x);
+        var dy = abs(pointY - y);
+        if (dx > raadius) return false;
         else return !(dy > raadius);
     }
 
-    public Ruum(int number, String info, int mahutavus,double x,double y,double raadius){
+    public Ruum(int number, String info, int mahutavus, double x, double y, double raadius) {
         this.number = number;
         this.info = info;
         this.mahutavus = mahutavus;
-        this.x=x;
-        this.y=y;
-        this.raadius=raadius;
-        ruumid.put(number,this);
+        this.x = x;
+        this.y = y;
+        this.raadius = raadius;
+        ruumid.put(number, this);
     }
 
     public int getNumber() {
@@ -76,20 +77,21 @@ public class Ruum{
         this.number = number;
     }
 
-    public void setX(double x){
-        this.x=x;
+    public void setX(double x) {
+        this.x = x;
+
     }
 
     public void setY(double y) {
         this.y = y;
     }
 
-    public String getInfo() {
-        return info;
-    }
-
     public int getMahutavus() {
         return mahutavus;
+    }
+
+    public String getInfo() {
+        return info;
     }
 
     public void setInfo(String info) {
