@@ -1,66 +1,98 @@
 package com.example.demo;
 
-import javafx.scene.shape.Rectangle;
+import javafx.scene.Group;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import java.util.HashMap;
+import java.util.Map;
 
-public class Ruum {
-    private String nimi;
+import static java.lang.Math.abs;
+
+public class Ruum{
+    String highlightStyle = "-fx-fill: green; -fx-opacity: 0.3;";
+
+    private int number;
+    private String info;
+    private final int mahutavus;
     private double x;
     private double y;
-    private double width;
-    private double height;
+    private final double raadius;
 
-    public Ruum(String nimi, double x, double y, double width, double height) {
-        this.nimi = nimi;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-    }
-    public boolean contains(double pointX, double pointY) {
-        return pointX >= x && pointX <= x + width && pointY >= y && pointY <= y + height;
+    public static Map<Integer, Ruum> ruumid = new HashMap<>();
+
+    public Group ring(){
+        Circle ring = new Circle(raadius);
+        ring.setCenterX(x);
+        ring.setCenterY(y);
+        ring.setStyle(highlightStyle);
+
+        Text text = new Text(info + "\n" + number);
+        text.setFont(Font.font("Verdana", FontWeight.BOLD, 10));
+        text.setTextAlignment(TextAlignment.CENTER);
+        text.setFill(Color.BLACK);
+
+        double textWidth = text.getLayoutBounds().getWidth();
+        double textHeight = text.getLayoutBounds().getHeight();
+        text.setLayoutX(ring.getCenterX() - (textWidth / 2));
+        text.setLayoutY(ring.getCenterY() + (textHeight / 4));
+        return new Group(ring,text);
     }
 
-    public String getNimi() {
-        return nimi;
+
+    public boolean onRingis(double pointX, double pointY) {
+        var dx = abs(pointX-x);
+        var dy = abs(pointY-y);
+        if (dx>raadius) return false;
+        else return !(dy > raadius);
     }
 
-    public void setNimi(String nimi) {
-        this.nimi = nimi;
+    public Ruum(int number, String info, int mahutavus,double x,double y,double raadius){
+        this.number = number;
+        this.info = info;
+        this.mahutavus = mahutavus;
+        this.x=x;
+        this.y=y;
+        this.raadius=raadius;
+        ruumid.put(number,this);
+    }
+
+    public int getNumber() {
+        return number;
     }
 
     public double getX() {
         return x;
     }
 
-    public void setX(double x) {
-        this.x = x;
-    }
-
     public double getY() {
         return y;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public void setX(double x){
+        this.x=x;
     }
 
     public void setY(double y) {
         this.y = y;
     }
 
-    public double getWidth() {
-        return width;
+    public String getInfo() {
+        return info;
     }
 
-    public void setWidth(double width) {
-        this.width = width;
+    public int getMahutavus() {
+        return mahutavus;
     }
 
-    public double getHeight() {
-        return height;
-    }
-
-    public void setHeight(double height) {
-        this.height = height;
-    }
-
-    public Rectangle highlightRuum(){
-        return new Rectangle(x,y,width,height);
+    public void setInfo(String info) {
+        this.info = info;
     }
 }
