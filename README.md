@@ -1,2 +1,13 @@
-# Ruhmatöö 2
-Loodud on Tartu Ülikooli Delta Keskuse esimese korruse interaktiivne kaart, otsingumootoriga ning ruumidel klõpsamise võimalusega. Kaart loeb ruumide info sisse tekstifailist ning peale akna sulgemist kirjutab kasutaja logid eraldi tekstifaili.
+# Delta Majaplaan
+
+Interaktiivne majaplaan Delta keskusest!
+
+Enam ei eksi sa Delta peal ära!
+
+Enam ei hiline praktikumi kuna ei leidnud õiget ruumi üles!
+
+Korruse plaani peal ruumile klõpsates highlighteb rakendus ruumi ja kuvab ruumi numbri ja klassiruumi tüübi koos mahutavusega.
+Rakenduse "otsingumootori" abil saab ruumi numbri põhjal oma lemmikruume otsida, mille järel kuvatakse selle asukoht.
+
+
+Autorid: Oliver Pikani ja Darius Kosk
