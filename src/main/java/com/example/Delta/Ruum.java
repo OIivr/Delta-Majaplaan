@@ -2,7 +2,6 @@ package com.example.Delta;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -13,7 +12,6 @@ import javafx.scene.text.TextAlignment;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.lang.Math.abs;
 
 public class Ruum {
     private final String highlightStyle = "-fx-fill: #ffbd4a; -fx-opacity: 0.6;";
