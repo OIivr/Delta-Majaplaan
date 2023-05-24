@@ -16,7 +16,7 @@ import java.util.Map;
 import static java.lang.Math.abs;
 
 public class Ruum {
-    String highlightStyle = "-fx-fill: green; -fx-opacity: 0.3;";
+    private final String highlightStyle = "-fx-fill: #ffbd4a; -fx-opacity: 0.6;";
 
     private int number;
     private String info;
