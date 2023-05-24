@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.Delta;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -6,6 +6,7 @@ import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,6 +16,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.util.Date;
@@ -22,7 +25,6 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class Majaplaan extends Application {
-
     Label label;
     String logi = "";
     private static final SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
@@ -44,16 +46,15 @@ public class Majaplaan extends Application {
             Scanner lugeja = new Scanner(new File("ruumid.txt"));
             while (lugeja.hasNextLine()) {
                 String[] rida = lugeja.nextLine().split(";");
-                new Ruum(Integer.parseInt(rida[0]), rida[1], Integer.parseInt(rida[2]), Double.parseDouble(rida[3]), Double.parseDouble(rida[4]), Double.parseDouble(rida[5]));
+                new Ruum(Integer.parseInt(rida[0]), rida[1], Integer.parseInt(rida[2]), Double.parseDouble(rida[3]), Double.parseDouble(rida[4]), Double.parseDouble(rida[5]), Double.parseDouble(rida[6]));
             }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
 
-        TextField otsingutext = new TextField("Sisesta otsitava ruumi number:");
-        otsingutext.setMinWidth(300);
+        TextField textField = new TextField("Sisesta otsitava ruumi number:");
+        textField.setMinWidth(300);
         Button button = new Button("Otsi");
-
 
         label = new Label();
         label.setStyle("-fx-border-color: #000000;-fx-border-width: 2;");
@@ -63,24 +64,24 @@ public class Majaplaan extends Application {
         label.setVisible(false);
         anchorPane.getChildren().add(label);
 
-        otsingutext.setLayoutX(10);
-        otsingutext.setLayoutY(10);
-        otsingutext.setPrefWidth(100);
+        textField.setLayoutX(10);
+        textField.setLayoutY(10);
+        textField.setPrefWidth(100);
         button.setLayoutX(120);
         button.setLayoutY(10);
         button.setOnAction(event -> {
             try {
-                int number = Integer.parseInt(otsingutext.getText());
+                int number = Integer.parseInt(textField.getText());
                 if (!ruumid.containsKey(number)) {
                     throw new ValeOtsingErind("Ruumi numbriga " + number + " ei leitud!");
                 } else {
-                    kuvaRuumRingiga(anchorPane, ruumid.get(number));
+                    kuvaRuum(anchorPane, ruumid.get(number));
                     label.setText("Ruum " + ruumid.get(number).getNumber() + "\n\n" + ruumid.get(number).getInfo() + "\n\n" + "Mahutavus: " + ruumid.get(number).getMahutavus());
                     label.setVisible(true);
                     logi += "\nAeg: " + aeg() + "\nKasutajale kuvati ruumi " + ruumid.get(number).getNumber() + " asukoht ja info.\n";
                 }
             } catch (NumberFormatException e) {
-                String sisend = otsingutext.getText();
+                String sisend = textField.getText();
                 label.setText("Sisend: \"" + sisend + "\" ei ole arv!");
                 label.setVisible(true);
                 logi += "\nAeg: " + aeg() + "\nKasutaja sisestas vales formaadis sisendi,\nKasutajale edastati sõnum:\nSisend: \"" + sisend + "\" ei ole arv!\n";
@@ -93,19 +94,17 @@ public class Majaplaan extends Application {
             }
         });
 
-        otsingutext.setOnKeyPressed(event -> {
+        textField.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 button.fire();
             }
         });
 
-
         imageView.setOnMouseClicked(event -> {
-            otsingutext.setText(event.getX()+";"+event.getY());
             for (Ruum ruum : ruumid.values()) {
-                if (ruum.onRingis(event.getX(), event.getY())) {
+                if (ruum.onRuudus(event.getX(), event.getY())) {
                     try {
-                        kuvaRuumRingiga(anchorPane, ruum);
+                        kuvaRuum(anchorPane, ruum);
                         logi += "\nAeg: " + aeg() + "\nKasutajale kuvati ruumi " + ruum.getNumber() + " asukoht ja info.\n";
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
@@ -114,8 +113,8 @@ public class Majaplaan extends Application {
             }
         });
 
-        anchorPane.getChildren().addAll(otsingutext, button);
-        Scene scene = new Scene(new VBox(new HBox(otsingutext, button), anchorPane));
+        anchorPane.getChildren().addAll(textField, button);
+        Scene scene = new Scene(new VBox(new HBox(textField, button), anchorPane));
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setOnCloseRequest(event -> {
@@ -133,17 +132,27 @@ public class Majaplaan extends Application {
 
     private String aeg() {
         SimpleDateFormat formaat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        String aeg = formaat.format(new Date());
-        return aeg;
+        return formaat.format(new Date());
     }
 
-    public void kuvaRuumRingiga(AnchorPane root, Ruum ruum) throws InterruptedException {
-        Group ring = ruum.ring();
-        root.getChildren().add(ring);
+    public void kuvaRuum(AnchorPane root, Ruum ruum) throws InterruptedException {
+        Group ruut = ruum.ruumiKuva();
+        if (ruum.getNumber() <= 1032 && ruum.getNumber() >= 1024){
+            Rotate nurk = new Rotate();
+            nurk.setAngle(15.5);
+            nurk.setPivotX(ruum.getX_ylemine());
+            nurk.setPivotY(ruum.getY_ylemine());
+            ruut.getTransforms().add(nurk);
+            for (Node node : ruut.getChildren())
+                if (node instanceof Text) {
+                    node.setRotate(-15.5);
+                }
+        }
+        root.getChildren().add(ruut);
         label.setText("Ruum " + ruum.getNumber() + "\n\n" + ruum.getInfo() + "\n\n" + "Mahutavus: " + ruum.getMahutavus());
         label.setVisible(true);
         PauseTransition paus = new PauseTransition(Duration.seconds(3));
-        paus.setOnFinished(e -> root.getChildren().remove(ring));
+        paus.setOnFinished(e -> root.getChildren().remove(ruut));
         paus.play();
     }
 
