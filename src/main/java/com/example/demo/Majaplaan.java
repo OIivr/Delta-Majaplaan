@@ -2,7 +2,6 @@ package com.example.demo;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
-
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -18,7 +17,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.util.Date;
 import java.util.Map;
 import java.util.Scanner;
@@ -31,7 +29,6 @@ public class Majaplaan extends Application {
 
     @Override
     public void start(Stage stage) {
-
 
         Map<Integer, Ruum> ruumid = Ruum.ruumid;
 
@@ -53,8 +50,8 @@ public class Majaplaan extends Application {
             throw new RuntimeException(e);
         }
 
-        TextField textField = new TextField("Sisesta otsitava ruumi number:");
-        textField.setMinWidth(300);
+        TextField otsingutext = new TextField("Sisesta otsitava ruumi number:");
+        otsingutext.setMinWidth(300);
         Button button = new Button("Otsi");
 
 
@@ -66,14 +63,14 @@ public class Majaplaan extends Application {
         label.setVisible(false);
         anchorPane.getChildren().add(label);
 
-        textField.setLayoutX(10);
-        textField.setLayoutY(10);
-        textField.setPrefWidth(100);
+        otsingutext.setLayoutX(10);
+        otsingutext.setLayoutY(10);
+        otsingutext.setPrefWidth(100);
         button.setLayoutX(120);
         button.setLayoutY(10);
         button.setOnAction(event -> {
             try {
-                int number = Integer.parseInt(textField.getText());
+                int number = Integer.parseInt(otsingutext.getText());
                 if (!ruumid.containsKey(number)) {
                     throw new ValeOtsingErind("Ruumi numbriga " + number + " ei leitud!");
                 } else {
@@ -83,7 +80,7 @@ public class Majaplaan extends Application {
                     logi += "\nAeg: " + aeg() + "\nKasutajale kuvati ruumi " + ruumid.get(number).getNumber() + " asukoht ja info.\n";
                 }
             } catch (NumberFormatException e) {
-                String sisend = textField.getText();
+                String sisend = otsingutext.getText();
                 label.setText("Sisend: \"" + sisend + "\" ei ole arv!");
                 label.setVisible(true);
                 logi += "\nAeg: " + aeg() + "\nKasutaja sisestas vales formaadis sisendi,\nKasutajale edastati sõnum:\nSisend: \"" + sisend + "\" ei ole arv!\n";
@@ -96,13 +93,15 @@ public class Majaplaan extends Application {
             }
         });
 
-        textField.setOnKeyPressed(event -> {
+        otsingutext.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 button.fire();
             }
         });
 
+
         imageView.setOnMouseClicked(event -> {
+            otsingutext.setText(event.getX()+";"+event.getY());
             for (Ruum ruum : ruumid.values()) {
                 if (ruum.onRingis(event.getX(), event.getY())) {
                     try {
@@ -115,13 +114,13 @@ public class Majaplaan extends Application {
             }
         });
 
-        anchorPane.getChildren().addAll(textField, button);
-        Scene scene = new Scene(new VBox(new HBox(textField, button), anchorPane));
+        anchorPane.getChildren().addAll(otsingutext, button);
+        Scene scene = new Scene(new VBox(new HBox(otsingutext, button), anchorPane));
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setOnCloseRequest(event -> {
             try {
-                FileWriter kirjutaja = new FileWriter(new File("logi.txt"));
+                FileWriter kirjutaja = new FileWriter("logi.txt");
                 kirjutaja.write(logi);
                 kirjutaja.close();
             } catch (IOException e) {

@@ -7,14 +7,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-
 import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.Math.abs;
 
 public class Ruum {
-    String highlightStyle = "-fx-fill: green; -fx-opacity: 0.3;";
+    String highlightStyle = "-fx-fill: #ffbd4a; -fx-opacity: 0.6;";
 
     private int number;
     private String info;
@@ -25,13 +24,23 @@ public class Ruum {
 
     public static Map<Integer, Ruum> ruumid = new HashMap<>();
 
+    public Ruum(int number, String info, int mahutavus, double x, double y, double raadius) {
+        this.number = number;
+        this.info = info;
+        this.mahutavus = mahutavus;
+        this.x = x;
+        this.y = y;
+        this.raadius = raadius;
+        ruumid.put(number, this);
+    }
+
     public Group ring() {
         Circle ring = new Circle(raadius);
         ring.setCenterX(x);
         ring.setCenterY(y);
         ring.setStyle(highlightStyle);
 
-        Text text = new Text(info + "\n" + number);
+        Text text = new Text(number + "\n" + info);
         text.setFont(Font.font("Verdana", FontWeight.BOLD, 10));
         text.setTextAlignment(TextAlignment.CENTER);
         text.setFill(Color.BLACK);
@@ -49,16 +58,6 @@ public class Ruum {
         var dy = abs(pointY - y);
         if (dx > raadius) return false;
         else return !(dy > raadius);
-    }
-
-    public Ruum(int number, String info, int mahutavus, double x, double y, double raadius) {
-        this.number = number;
-        this.info = info;
-        this.mahutavus = mahutavus;
-        this.x = x;
-        this.y = y;
-        this.raadius = raadius;
-        ruumid.put(number, this);
     }
 
     public int getNumber() {
