@@ -19,12 +19,12 @@ public class Ruum {
     private int number;
     private String info;
     private final int mahutavus;
-    private double x_alumine;
-    private double y_alumine;
-    private double x_ylemine;
-    private double y_ylemine;
+    private final double x_alumine;
+    private final double y_alumine;
+    private final double x_ylemine;
+    private final double y_ylemine;
 
-    private int korrus;
+    private final int korrus;
 
     public static Map<Integer, Ruum> ruumid = new HashMap<>();
 
@@ -65,7 +65,7 @@ public class Ruum {
 
 
     public boolean onRuudus(double X, double Y) {
-        return (ruumiKuva().contains(X, Y));
+        return (ruumiKuva().getChildren().get(0).contains(X, Y));
     }
 
     public Ruum(int number, String info, int mahutavus, double x_ylemine, double y_ylemine,double x_alumine,double y_alumine) {

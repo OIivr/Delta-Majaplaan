@@ -2,8 +2,6 @@ package com.example.Delta;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
-
-import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -20,8 +18,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-
 import java.util.Date;
 import java.util.Map;
 import java.util.Scanner;
@@ -33,8 +29,6 @@ public class Majaplaan extends Application {
     int kuvatavKorrus;
     AnchorPane anchorPane = new AnchorPane();
     Map<Integer, Ruum> ruumid = Ruum.ruumid;
-
-    private static final SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
 
     @Override
     public void start(Stage stage) {
@@ -136,7 +130,7 @@ public class Majaplaan extends Application {
                 kirjutaja.close();
             } catch (FileNotFoundException e) {
                 try {
-                    FileWriter kirjutaja = new FileWriter(new File("logi.txt"));
+                    FileWriter kirjutaja = new FileWriter("logi.txt");
                     kirjutaja.write(logi);
                     kirjutaja.close();
                 } catch (IOException s) {
@@ -201,17 +195,16 @@ public class Majaplaan extends Application {
                 }
             }
         });
-
     }
-
-
     private String aeg() {
         SimpleDateFormat formaat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         return formaat.format(new Date());
     }
 
     public void kuvaRuum(AnchorPane root, Ruum ruum) throws InterruptedException {
-        if (ruum.getKorrus()==kuvatavKorrus){
+        var lapsed = root.getChildren();
+        if (lapsed.size() == 3) lapsed.remove(2);
+        if (ruum.getKorrus() == kuvatavKorrus) {
             Group ruut = ruum.ruumiKuva();
             if (ruum.getNumber() <= 1032 && ruum.getNumber() >= 1024) {
                 Rotate nurk = new Rotate();
@@ -227,12 +220,8 @@ public class Majaplaan extends Application {
             root.getChildren().add(ruut);
             label.setText("Ruum " + ruum.getNumber() + "\n\n" + ruum.getInfo() + "\n\n" + "Mahutavus: " + ruum.getMahutavus());
             label.setVisible(true);
-            PauseTransition paus = new PauseTransition(Duration.seconds(3));
-            paus.setOnFinished(e -> root.getChildren().remove(ruut));
-            paus.play();
         }
     }
-
     public static void main(String[] args) {
         launch(args);
     }
