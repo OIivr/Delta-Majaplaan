@@ -97,7 +97,8 @@ public class Majaplaan extends Application {
                 } else {
                     if (kuvatavKorrus != number / 1000) kuvaKorrus(number / 1000);
                     kuvaRuum(anchorPane, ruumid.get(number));
-                    label.setText("Ruum " + ruumid.get(number).getNumber() +"\nKorrus: "+ ruumid.get(number).getKorrus()+"\n" + ruumid.get(number).getInfo() + "\nMahutavus: " + ruumid.get(number).getMahutavus());
+                    String mahutavus =  (ruumid.get(number).getMahutavus() == 0) ? "Pole teada" : String.valueOf(ruumid.get(number).getMahutavus());
+                    label.setText("Ruum " + ruumid.get(number).getNumber() +"\nKorrus: "+ ruumid.get(number).getKorrus()+"\n" + ruumid.get(number).getInfo() + "\nMahutavus: " + mahutavus);
                     label.setVisible(true);
                     logi += "\nAeg: " + aeg() + "\nKasutajale kuvati ruumi " + ruumid.get(number).getNumber() + " asukoht ja info.\n";
                 }
@@ -238,7 +239,8 @@ public class Majaplaan extends Application {
                     }
             }
             root.getChildren().add(ruut);
-            label.setText("Ruum " + ruum.getNumber() +"\nKorrus: "+ ruum.getKorrus()+"\n" + ruum.getInfo() + "\nMahutavus: " + ruum.getMahutavus());
+            String mahutavus =  (ruum.getMahutavus() == 0) ? "Pole teada" : String.valueOf(ruum.getMahutavus());
+            label.setText("Ruum " + ruum.getNumber() +"\nKorrus: "+ ruum.getKorrus()+"\n" + ruum.getInfo() + "\nMahutavus: " + mahutavus);
             label.setVisible(true);
         }
     }
