@@ -93,11 +93,11 @@ public class Majaplaan extends Application {
             try {
                 int number = Integer.parseInt(textField.getText());
                 if (!ruumid.containsKey(number)) {
-                    throw new ValeOtsingErind("Ruumi numbriga " + number + " ei leitud!");
+                    throw new ValeOtsingErind("Ruumi numbriga\n" + number + " ei leitud!");
                 } else {
                     if (kuvatavKorrus != number / 1000) kuvaKorrus(number / 1000);
                     kuvaRuum(anchorPane, ruumid.get(number));
-                    label.setText("Ruum " + ruumid.get(number).getNumber() + "\n\n" + ruumid.get(number).getInfo() + "\n\n" + "Mahutavus: " + ruumid.get(number).getMahutavus());
+                    label.setText("Ruum " + ruumid.get(number).getNumber() +"\nKorrus: "+ ruumid.get(number).getKorrus()+"\n" + ruumid.get(number).getInfo() + "\nMahutavus: " + ruumid.get(number).getMahutavus());
                     label.setVisible(true);
                     logi += "\nAeg: " + aeg() + "\nKasutajale kuvati ruumi " + ruumid.get(number).getNumber() + " asukoht ja info.\n";
                 }
