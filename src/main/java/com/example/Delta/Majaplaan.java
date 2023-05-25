@@ -49,8 +49,10 @@ public class Majaplaan extends Application {
         }
 
         //Otsinguriba
-        TextField textField = new TextField("Sisesta otsitava ruumi number:");
-        textField.setMinWidth(300);
+        TextField textField = new TextField();
+        textField.setPromptText("Sisesta ruumi number:");
+        textField.setStyle("-fx-prompt-text-fill: derive(-fx-control-inner-background,-50%);");
+        textField.setMinWidth(170);
 
         //Otsingunupp
         Button otsingNupp = new Button("Otsi");
@@ -174,7 +176,7 @@ public class Majaplaan extends Application {
 
         //Infot kuvav kast
         label = new Label();
-        label.setStyle("-fx-border-color: #000000;-fx-border-width: 2;");
+        label.setStyle("-fx-border-color: #000000;-fx-border-width: 2;-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: #958E8E; -fx-padding: 10px");
         label.setBackground(new Background(new BackgroundFill(Color.rgb(240, 226, 172), CornerRadii.EMPTY, Insets.EMPTY)));
         label.setLayoutX(580);
         label.setMaxWidth(200);
@@ -185,7 +187,7 @@ public class Majaplaan extends Application {
         //Ruumil klõpsamisel selle info kuvamine
         imageView.setOnMouseClicked(event -> { //Ruumi info kuvamine juhul kui kasutaja vajutas ruumi peale.
             for (Ruum ruum : ruumid.values()) {
-                if (ruum.onRuudus(event.getX(), event.getY())) {
+                if (ruum.onRuudus(event.getX(), event.getY()) && kuvatavKorrus == ruum.getKorrus()) {
                     try {
                         kuvaRuum(anchorPane, ruum);
                         logi += "\nAeg: " + aeg() + "\nKasutajale kuvati ruumi " + ruum.getNumber() + " asukoht ja info.\n";
@@ -203,10 +205,15 @@ public class Majaplaan extends Application {
 
     public void kuvaRuum(AnchorPane root, Ruum ruum) throws InterruptedException {
         var lapsed = root.getChildren();
-        if (lapsed.size() == 3) lapsed.remove(2);
+        lapsed.removeIf(node -> node instanceof Group);
         if (ruum.getKorrus() == kuvatavKorrus) {
             Group ruut = ruum.ruumiKuva();
-            if (ruum.getNumber() <= 1032 && ruum.getNumber() >= 1024) {
+            if (ruum.getNumber() <= 1032 && ruum.getNumber() >= 1024
+                    || ruum.getNumber()<=2041 && ruum.getNumber()>=2029
+                    || ruum.getNumber()<=3082 && ruum.getNumber()>=3070
+                    || ruum.getNumber()==3086
+                    || ruum.getNumber()<=3090 && ruum.getNumber()>=3088
+                    || ruum.getNumber()<=4080 && ruum.getNumber()>=4066) {
                 Rotate nurk = new Rotate();
                 nurk.setAngle(15.5);
                 nurk.setPivotX(ruum.getX_ylemine());
@@ -217,8 +224,21 @@ public class Majaplaan extends Application {
                         node.setRotate(-15.5);
                     }
             }
+            if (ruum.getNumber() <= 2020 && ruum.getNumber() >=2018
+                    || ruum.getNumber()>=3037 && ruum.getNumber()<=3043
+                    || ruum.getNumber()<=4043 && ruum.getNumber()>=4035) {
+                Rotate nurk = new Rotate();
+                nurk.setAngle(40);
+                nurk.setPivotX(ruum.getX_ylemine());
+                nurk.setPivotY(ruum.getY_ylemine());
+                ruut.getTransforms().add(nurk);
+                for (Node node : ruut.getChildren())
+                    if (node instanceof Text) {
+                        node.setRotate(-40);
+                    }
+            }
             root.getChildren().add(ruut);
-            label.setText("Ruum " + ruum.getNumber() + "\n\n" + ruum.getInfo() + "\n\n" + "Mahutavus: " + ruum.getMahutavus());
+            label.setText("Ruum " + ruum.getNumber() +"\nKorrus: "+ ruum.getKorrus()+"\n" + ruum.getInfo() + "\nMahutavus: " + ruum.getMahutavus());
             label.setVisible(true);
         }
     }
